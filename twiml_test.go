@@ -20,9 +20,7 @@ func x(s string, n int) string {
 
 func buildResponse(s ...string) string {
 	t := []string{xml.Header, "<Response>\n"}
-	for _, verb := range s {
-		t = append(t, verb)
-	}
+	t = append(t, s...)
 	t = append(t, "</Response>")
 	return strings.Join(t, "")
 }

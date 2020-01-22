@@ -47,7 +47,7 @@ func (r *Response) Type() string {
 // if any are constructed improperly
 func (r *Response) Validate() error {
 	if len(r.Children) == 0 {
-		return ValidationError{[]error{fmt.Errorf("Can not encode an empty response")}}
+		return ValidationError{[]error{fmt.Errorf("can not encode an empty response")}}
 	}
 	var errs []error
 	for _, s := range r.Children {
@@ -57,7 +57,7 @@ func (r *Response) Validate() error {
 				errs = append(errs, childErr)
 			}
 		default:
-			return ValidationError{[]error{fmt.Errorf("Unknown markup type %T as child of Response", s)}}
+			return ValidationError{[]error{fmt.Errorf("unknown markup type %T as child of Response", s)}}
 		}
 	}
 	if len(errs) > 0 {
@@ -75,10 +75,7 @@ func NewResponse() *Response {
 // Add appends TwiML verb structs to response. Valid verbs: Enqueue, Say,
 // Leave, Message, Pause, Play, Record, Redirect, Reject, Hangup
 func (r *Response) Add(ml ...Markup) {
-	for _, s := range ml {
-		r.Children = append(r.Children, s)
-	}
-	return
+	r.Children = append(r.Children, ml...)
 }
 
 // Encode returns an XML encoded response or a ValidationError if any

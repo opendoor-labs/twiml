@@ -37,10 +37,7 @@ func IntBetween(field int, high int, low int) bool {
 
 // Required validates that a field is not the empty string
 func Required(field string) bool {
-	if len(field) > 0 {
-		return true
-	}
-	return false
+	return len(field) > 0
 }
 
 // OneOfOpt validates that a field is one of the options provided or the empty string (for optional fields)
@@ -141,10 +138,10 @@ func constructCallbackEventValidator(eventNames []string) *regexp.Regexp {
 }
 
 var (
-	// callback events valid for Sip TwiML block
+	// SipCallbackEvents validator for Sip TwiML block
 	SipCallbackEvents = constructCallbackEventValidator([]string{"initiated", "ringing", "answered", "completed"})
 
-	// callback events valid for Conference TwiML block
+	// ConferenceCallbackEvents validator for Conference TwiML block
 	ConferenceCallbackEvents = constructCallbackEventValidator([]string{"start", "end", "join", "leave", "mute", "hold", "speaker"})
 )
 

@@ -20,7 +20,7 @@ func (c *Client) Validate() error {
 		Required(c.Name),
 	)
 	if !ok {
-		return fmt.Errorf("Client markup failed validation")
+		return fmt.Errorf("client markup failed validation")
 	}
 	return nil
 }
@@ -63,7 +63,7 @@ func (c *Conference) Validate() error {
 		AllowedMethod(c.RecordingStatusCallbackMethod),
 	)
 	if !ok {
-		return fmt.Errorf("Conference markup failed validation")
+		return fmt.Errorf("conference markup failed validation")
 	}
 	return nil
 }
@@ -90,15 +90,14 @@ type Dial struct {
 // Validate returns an error if the TwiML is constructed improperly
 func (d *Dial) Validate() error {
 	var errs []error
-	var hasSIPChild bool
+	var hasChild bool
 	for _, s := range d.Children {
 		switch t := s.Type(); t {
 		default:
-			return fmt.Errorf("Not a valid verb under Dial: '%T'", s)
+			return fmt.Errorf("not a valid verb under Dial: '%T'", s)
 		case "Client", "Conference", "Number", "Queue", "Sip":
-			if t == "Sip" {
-				hasSIPChild = true
-			}
+			hasChild = true
+
 			if childErr := s.Validate(); childErr != nil {
 				errs = append(errs, childErr)
 			}
@@ -108,11 +107,11 @@ func (d *Dial) Validate() error {
 	ok := Validate(
 		OneOfOpt(d.Method, "GET", "POST"),
 	)
-	if ok && !hasSIPChild {
+	if ok && !hasChild {
 		ok = Validate(Required(d.Number))
 	}
 	if !ok {
-		errs = append(errs, fmt.Errorf("Dial did not pass validation"))
+		errs = append(errs, fmt.Errorf("dial did not pass validation"))
 	}
 
 	if len(errs) > 0 {
@@ -123,10 +122,7 @@ func (d *Dial) Validate() error {
 
 // Add adds noun structs to a Dial response as children
 func (d *Dial) Add(ml ...Markup) {
-	for _, s := range ml {
-		d.Children = append(d.Children, s)
-	}
-	return
+	d.Children = append(d.Children, ml...)
 }
 
 // Type returns the XML name of the verb
@@ -486,7 +482,7 @@ func (g *Gather) Validate() error {
 	for _, s := range g.Children {
 		switch t := s.Type(); t {
 		default:
-			return fmt.Errorf("Not a valid verb as child of Gather: '%T'", s)
+			return fmt.Errorf("not a valid verb as child of Gather: '%T'", s)
 		case "Say", "Play", "Pause":
 			if childErr := s.Validate(); childErr != nil {
 				errs = append(errs, childErr)
@@ -497,7 +493,7 @@ func (g *Gather) Validate() error {
 		AllowedMethod(g.Method),
 	)
 	if !ok {
-		errs = append(errs, fmt.Errorf("Gather failed validation"))
+		errs = append(errs, fmt.Errorf("gather failed validation"))
 		return ValidationError{errs}
 	}
 	if len(errs) > 0 {
@@ -509,10 +505,7 @@ func (g *Gather) Validate() error {
 // Add collects digits a caller enter by pressing the keypad to an existing Gather verb.
 // Valid nested verbs: Say, Pause, Play
 func (g *Gather) Add(ml ...Markup) {
-	for _, s := range ml {
-		g.Children = append(g.Children, s)
-	}
-	return
+	g.Children = append(g.Children, ml...)
 }
 
 // Type returns the XML name of the verb

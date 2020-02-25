@@ -7,10 +7,13 @@ import (
 
 // Client TwiML
 type Client struct {
-	XMLName xml.Name `xml:"Client"`
-	Method  string   `xml:"method,attr,omitempty"`
-	URL     string   `xml:"URL,omitempty"`
-	Name    string   `xml:",chardata"`
+	XMLName              xml.Name `xml:"Client"`
+	Method               string   `xml:"method,attr,omitempty"`
+	URL                  string   `xml:"URL,omitempty"`
+	Name                 string   `xml:",chardata"`
+	StatusCallbackEvent  string   `xml:"statusCallbackEvent,attr,omitempty"`
+	StatusCallback       string   `xml:"statusCallback,attr,omitempty"`
+	StatusCallbackMethod string   `xml:"statusCallbackMethod,attr,omitempty"`
 }
 
 // Validate returns an error if the TwiML is constructed improperly
@@ -219,11 +222,14 @@ func (s *Sms) Type() string {
 
 // Number TwiML
 type Number struct {
-	XMLName    xml.Name `xml:"Number"`
-	SendDigits string   `xml:"sendDigits,attr,omitempty"`
-	URL        string   `xml:"url,attr,omitempty"`
-	Method     string   `xml:"method,attr,omitempty"`
-	Number     string   `xml:",chardata"`
+	XMLName              xml.Name `xml:"Number"`
+	SendDigits           string   `xml:"sendDigits,attr,omitempty"`
+	URL                  string   `xml:"url,attr,omitempty"`
+	Method               string   `xml:"method,attr,omitempty"`
+	Number               string   `xml:",chardata"`
+	StatusCallbackEvent  string   `xml:"statusCallbackEvent,attr,omitempty"`
+	StatusCallback       string   `xml:"statusCallback,attr,omitempty"`
+	StatusCallbackMethod string   `xml:"statusCallbackMethod,attr,omitempty"`
 }
 
 // Validate returns an error if the TwiML is constructed improperly
